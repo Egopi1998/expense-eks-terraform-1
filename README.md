@@ -30,7 +30,7 @@ FLUSH PRIVILEGES;
 ```
 * run command to configure the eks
 ```
-Aws eks update-kubeconfig  --region us-east-1 --name expense-dev
+aws eks update-kubeconfig  --region us-east-1 --name expense-dev
 ```
 * EKS Ingress controller Setup
 ```
@@ -66,11 +66,7 @@ helm repo update eks
 ```
 * install controller
 ```
-helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
-  -n kube-system \
-  --set clusterName=expense-dev \
-  --set serviceAccount.create=false \
-  --set serviceAccount.name=aws-load-balancer-controller
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=expense-dev
 ```
 * To check ingress controller pods running or not
 ```
