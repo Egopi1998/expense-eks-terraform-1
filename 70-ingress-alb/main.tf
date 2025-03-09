@@ -77,10 +77,36 @@ resource "aws_lb_listener_rule" "frontend" {
 
   condition {
     host_header {
-      # expense-dev.daws78s.online --> frontend pod
+      # expense-dev.hellandhaven.xyz --> frontend pod
       values = ["expense-${var.environment}.${var.zone_name}"]
     }
   }
+  
+}
+resource "aws_lb_listener_rule" "nginx" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 101 # less number will be first validated
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.nginx.arn
+  }
+
+  condition {
+    host_header {
+      # nginx.hellandhaven.xyz --> frontend pod
+      values = ["nginx.${var.zone_name}"]
+    }
+  }
+  
+}
+
+resource "aws_lb_target_group" "nginx" {
+  name     = "${var.project_name}-${var.environment}-nginx"
+  port     = 80
+  protocol = "HTTP"
+  target_type = "ip"
+  vpc_id   = data.aws_ssm_parameter.vpc_id.value
 }
 
 
@@ -95,6 +121,15 @@ module "records" {
   records = [
     {
       name    = "expense-${var.environment}"
+      type    = "A"
+      allow_overwrite = true
+      alias   = {
+        name    = aws_lb.ingress_alb.dns_name
+        zone_id = aws_lb.ingress_alb.zone_id
+      }
+    },
+    {
+      name    = "nginx"
       type    = "A"
       allow_overwrite = true
       alias   = {
