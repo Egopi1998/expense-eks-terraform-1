@@ -1,5 +1,5 @@
 # expense-eks-terraform-1
-# Expense-EKS-terraform
+
 * Install tools from bastion.sh if not installing with terraform user data
 ```
 wget -O bastion.sh https://raw.githubusercontent.com/Egopi1998/expense-eks-terraform-1/main/bastion.sh
