@@ -63,4 +63,4 @@ ln -s /opt/kubectx/kubens /usr/local/bin/kubens
 VALIDATE $? "kubens installation"
 
 #java for jenkins 
-sudo yum install fontconfig java-17-openjdk jenkins -y
+sudo yum install fontconfig java-17-openjdk -y
